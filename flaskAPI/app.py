@@ -2,10 +2,23 @@ from flask import Flask, jsonify, request
 import pickle
 import numpy as np
 from flask_cors import CORS
+import os
 
-#load model from file
-pickle_in = open("marksmodel.pickle", "rb")
-model = pickle.load(pickle_in)
+
+# Get the absolute path of the current file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Full path to the pickle file
+PICKLE_PATH = os.path.join(BASE_DIR, "marksmodel.pickle")
+
+if not os.path.exists(PICKLE_PATH):
+    raise FileNotFoundError(f"Model file not found at {PICKLE_PATH}")
+
+# Load the pickle file
+with open(PICKLE_PATH, "rb") as pickle_in:
+    model = pickle.load(pickle_in)
+
+
 
 app = Flask(__name__)
 CORS(app)
